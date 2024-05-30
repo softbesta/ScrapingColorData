@@ -12,7 +12,7 @@
 # next.js
 /.next/
 /out/
-/screenshots/
+/screenshots/*.png
 
 # production
 /build
