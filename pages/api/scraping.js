@@ -16,8 +16,8 @@ let browser
 const connectBrowser = async () => {
   try {
     browser = await puppeteer.launch({
-      // headless: false,
-      headless: true,
+      headless: false,
+      // headless: true,
       defaultViewport: null,
       dumpio: true,
       defaultViewport: {
