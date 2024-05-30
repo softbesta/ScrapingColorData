@@ -7,9 +7,15 @@ const Dashboard = ({
   setIsConnected,
 }) => {
 
+  const [isLoading, setIsLoading] = useState(false)
   const isFetching = useRef(false)
   const [timerCount, setTimerCount] = useState(0)
   const timerRef = useRef(0)
+
+  const valuesRef = useRef(values)
+  useEffect(() => {
+    valuesRef.current = values
+  }, [values])
 
   const intervalSec = 1
 
@@ -36,6 +42,7 @@ const Dashboard = ({
   }, [])
   useEffect(() => {
     console.log({ timerCount })
+    if (isFetching.current) return
     getColors()
   }, [timerCount])
 
@@ -45,10 +52,11 @@ const Dashboard = ({
   }
 
   const getColors = async () => {
-    if (isFetching.current) return
+    console.log('===getColors===')
+    isFetching.current = true
     try {
       const items = []
-      values.forEach(item => {
+      valuesRef.current.forEach(item => {
         if (!item || !item.url || !item.x || !item.y) return
         items.push({
           id: item.id,
@@ -64,7 +72,6 @@ const Dashboard = ({
         items
       }
 
-      isFetching.current = true
       const response = await fetch(`/api/scraping/`, {
         method: 'POST',
         headers: {
@@ -72,17 +79,16 @@ const Dashboard = ({
         },
         body: JSON.stringify(data)
       })
-      
+
       if (!response.ok) {
         throw new Error(response.statusText)
       }
-      isFetching.current = false
 
       const res = await response.json()
       const resData = res.data
       if (!resData || resData.length <= 0) return
 
-      const update = values.map(item => {
+      const update = valuesRef.current.map(item => {
         const idx = resData.findIndex(color => color.id === item.id)
         if (idx < 0) return {
           ...item,
@@ -105,8 +111,10 @@ const Dashboard = ({
         }
 
       })
-      console.log({ update })
+      // console.log({ update })
       setValues(update)
+
+      isFetching.current = false
     } catch (err) {
     }
   }
@@ -114,7 +122,7 @@ const Dashboard = ({
   const openAllPages = async () => {
     try {
       const items = []
-      values.forEach(item => {
+      valuesRef.current.forEach(item => {
         if (!item || !item.url || !item.x || !item.y) return
         items.push({
           id: item.id,
@@ -142,9 +150,9 @@ const Dashboard = ({
       const res = await response.json()
       const resData = res.data
       if (!resData || resData.length <= 0) return
-      console.log('fffffffffff', { resData })
+      // console.log('fffffffffff', { resData })
 
-      const update = values.map(item => {
+      const update = valuesRef.current.map(item => {
         const idx = resData.findIndex(color => color.id === item.id)
         if (idx < 0) return item
         return {
@@ -153,7 +161,7 @@ const Dashboard = ({
         }
 
       })
-      console.log('vvvvvvvvv', { update })
+      // console.log('vvvvvvvvv', { update })
       setValues(update)
 
     } catch (err) {
@@ -180,13 +188,13 @@ const Dashboard = ({
       const resData = res.data
       if (!resData || resData.length <= 0) return
 
-      const update = values.map(item => {
+      const update = valuesRef.current.map(item => {
         return {
           ...item,
           isOpen: false,
         }
       })
-      console.log({ update })
+      // console.log({ update })
       setValues(update)
     } catch (err) {
     }
@@ -195,12 +203,18 @@ const Dashboard = ({
   const handleOn = async () => {
 
     if (!isConnected) {
+      setIsLoading(true)
       await openAllPages()
       delay(10000)
       startTImer()
+      setIsLoading(false)
     } else {
+      setIsLoading(true)
       stopTimer()
+      await delay(5000)
       await closeAllPages()
+      // closeAllPages()
+      setIsLoading(false)
     }
     setIsConnected(v => !v)
     return
@@ -302,7 +316,17 @@ const Dashboard = ({
           ))}
         </tbody>
       </table>
-      <button className="on-button" onClick={handleOn}>{!isConnected ? 'Turn On' : 'Turn Off'}</button>
+      <button
+        className={`on-button ${isConnected? 'btnOff': ''} ${isLoading ? 'btnDisabled' : ''}`}
+        onClick={handleOn}
+        disabled={isLoading}
+      >
+        {isLoading ?
+          'Loading'
+          :
+          !isConnected ? 'Turn On' : 'Turn Off'
+        }
+      </button>
     </div>
   )
 };

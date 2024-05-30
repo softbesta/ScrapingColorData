@@ -173,6 +173,14 @@ th {
   padding: 20px;
   border-radius: 34px;
   font-size: 24px;
-  cursor: pointer;
   margin-top: 20px;
+  cursor: pointer;
+}
+
+.btnDisabled {
+  background-color: rgb(167, 167, 167) !important;
+  cursor: default;
+}
+.btnOff {
+  background-color: rgb(207, 74, 74);
 }

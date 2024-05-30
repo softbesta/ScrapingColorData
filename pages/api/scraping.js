@@ -14,74 +14,94 @@ let pages = []
 let browser
 
 const connectBrowser = async () => {
-  browser = await puppeteer.launch({
-    // headless: false,
-    headless: true,
-    defaultViewport: null,
-    dumpio: true,
-    defaultViewport: {
-      width: 1280,
-      height: 720,
-    },
-  })
-  console.log('successfully opened')
+  try {
+    browser = await puppeteer.launch({
+      // headless: false,
+      headless: true,
+      defaultViewport: null,
+      dumpio: true,
+      defaultViewport: {
+        width: 1280,
+        height: 720,
+      },
+    })
+    console.log('successfully opened')
+
+  } catch {
+    console.error('=== connectBrowser === failed to connect browser')
+  }
 }
 
 const openPages = async (id, url) => {
-  console.log('00000', { id, url })
-  pages[id] = await browser.newPage()
+  try {
+    console.log('00000', { id, url })
+    pages[id] = await browser.newPage()
 
-  await pages[id].goto(url, {
-    waitUntil: "networkidle2",
-  })
-  await delay(5000)
-  return true
+    await pages[id].goto(url, {
+      waitUntil: "networkidle2",
+    })
+    await delay(5000)
+    return true
+  } catch (err) {
+    console.error('=== openPages === failed to open page. url: ', url)
+    return false
+  }
 }
 const closePages = async () => {
-  if (!pages || pages.length <= 0) return
-  // const len = pages.length
-  await Promise.all(pages.map(async (page) => {
-    if (!page || page.isClosed()) return
-    await page.close()
-  }))
-  pages = []
-  return false
+  try {
+    if (!pages || pages.length <= 0) return
+    // const len = pages.length
+    await Promise.all(pages.map(async (page) => {
+      if (!page || page.isClosed()) return
+      await page.close()
+    }))
+    pages = []
+    return false
+  } catch (err) {
+    console.error('=== closePages === failed to close page.')
+    return false
+  }
 }
 
 const getColorAtPosition = async (id, url, px, py) => {
-  const screenshotPath = path.join(process.cwd(), `/screenshots/screenshot${id}.png`)
+  try {
+    const screenshotPath = path.join(process.cwd(), `/screenshots/screenshot${id}.png`)
 
-  console.log({ px, py })
-  const page = pages[id]
-  if (!page) return
+    console.log({ px, py })
+    const page = pages[id]
+    if (!page) return
 
-  // await page.goto(url, {
-  //   waitUntil: "networkidle2",
-  // })
+    // await page.goto(url, {
+    //   waitUntil: "networkidle2",
+    // })
 
-  // await delay(5000)
-  await page.screenshot({ path: screenshotPath });
+    // await delay(5000)
+    await page.screenshot({ path: screenshotPath });
 
-  const respColor = await new Promise((resolve, reject) => {
-    getPixels(screenshotPath, (err, pixcels) => {
-      try {
-        // Delete a screenshot file.
-        // fs.unlinkSync(screenshotPath)
-        if (err) {
-          throw Error
+    const respColor = await new Promise((resolve, reject) => {
+      getPixels(screenshotPath, (err, pixcels) => {
+        try {
+          // Delete a screenshot file.
+          // fs.unlinkSync(screenshotPath)
+          if (err) {
+            throw Error
+          }
+          const r = pixcels.get(px, py, 0)
+          const g = pixcels.get(px, py, 1)
+          const b = pixcels.get(px, py, 2)
+          console.log({ r, g, b })
+          resolve({ error: false, color: { r, g, b } })
+        } catch (err) {
+          reject({ error: true, mesage: err.mesage })
         }
-        const r = pixcels.get(px, py, 0)
-        const g = pixcels.get(px, py, 1)
-        const b = pixcels.get(px, py, 2)
-        console.log({ r, g, b })
-        resolve({ error: false, color: { r, g, b } })
-      } catch (err) {
-        reject({ error: true, mesage: err.mesage })
-      }
+      })
     })
-  })
 
-  return respColor
+    return respColor
+  } catch (err) {
+    console.error('=== getColorAtPosition === failed to close page.')
+    return { error: true, mesage: err.mesage }
+  }
 }
 
 
