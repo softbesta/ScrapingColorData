@@ -15,6 +15,8 @@ const Dashboard = ({
   const valuesRef = useRef(values)
   useEffect(() => {
     valuesRef.current = values
+    const urlValues = JSON.stringify(values)
+    localStorage.setItem('urlValues', urlValues)
   }, [values])
 
   const intervalSec = 1
@@ -34,6 +36,7 @@ const Dashboard = ({
       console.log('===timer ended===')
       clearInterval(timerRef.current)
       timerRef.current = 0
+      setTimerCount(0)
     }
   }
 
@@ -41,9 +44,11 @@ const Dashboard = ({
     return () => stopTimer()
   }, [])
   useEffect(() => {
-    console.log({ timerCount })
-    if (isFetching.current) return
-    getColors()
+    if (timerCount > 0) {
+      console.log({ timerCount })
+      if (isFetching.current) return
+      getColors()
+    }
   }, [timerCount])
 
   const onSave = async (id) => {
@@ -52,8 +57,8 @@ const Dashboard = ({
   }
 
   const getColors = async () => {
-    console.log('===getColors===')
     isFetching.current = true
+    console.log('===getColors===')
     try {
       const items = []
       valuesRef.current.forEach(item => {
@@ -81,6 +86,7 @@ const Dashboard = ({
       })
 
       if (!response.ok) {
+        isFetching.current = false
         throw new Error(response.statusText)
       }
 
@@ -116,6 +122,7 @@ const Dashboard = ({
 
       isFetching.current = false
     } catch (err) {
+      isFetching.current = false
     }
   }
 
@@ -205,7 +212,7 @@ const Dashboard = ({
     if (!isConnected) {
       setIsLoading(true)
       await openAllPages()
-      delay(10000)
+      await delay(2000)
       startTImer()
       setIsLoading(false)
     } else {
@@ -317,7 +324,7 @@ const Dashboard = ({
         </tbody>
       </table>
       <button
-        className={`on-button ${isConnected? 'btnOff': ''} ${isLoading ? 'btnDisabled' : ''}`}
+        className={`on-button ${isConnected ? 'btnOff' : ''} ${isLoading ? 'btnDisabled' : ''}`}
         onClick={handleOn}
         disabled={isLoading}
       >

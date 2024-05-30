@@ -67,8 +67,13 @@ export default function Home() {
   const [tab, setTab] = useState(0)
 
   useEffect(() => {
-    console.log({ values })
-  }, [values])
+    const urlValues = localStorage.getItem('urlValues')
+    console.log({ urlValues })
+    const update = JSON.parse(urlValues)
+    if (update.length > 0) {
+      setValues(update)
+    }
+  }, [])
 
   const handleChange = (e, id) => {
     const field = e.target.name
