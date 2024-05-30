@@ -11,7 +11,7 @@ function delay(time) {
 }
 
 const getColorAtPosition = async (id, url, px, py) => {
-  const screenshotPath = path.join(process.cwd(), `screenshot${id}.png`)
+  const screenshotPath = path.join(process.cwd(), `/screenshots/screenshot${id}.png`)
 
   console.log({ px, py })
   const browser = await puppeteer.launch({

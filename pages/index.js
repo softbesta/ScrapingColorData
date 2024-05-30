@@ -13,17 +13,17 @@ export default function Home() {
   const prevTime = useRef((new Date()).valueOf())
   const initValues = [
     {
-      id: 1, url: 'https://placard.pt/', x: 400, y: 200,
+      id: 1, url: 'https://betclic.pt/', x: 300, y: 300,
       lastUpdatedAt: undefined, diffSec: 0,
       isOpen: false, fetchedColor: undefined
     },
     {
-      id: 2, url: 'https://placard.pt/', x: 200, y: 200,
+      id: 2, url: 'https://placard.pt/', x: 400, y: 200,
       lastUpdatedAt: undefined, diffSec: 0,
       isOpen: false, fetchedColor: undefined
     },
     {
-      id: 3, url: 'https://betclic.pt/', x: 300, y: 300,
+      id: 3, url: 'https://placard.pt/', x: 200, y: 200,
       lastUpdatedAt: undefined, diffSec: 0,
       isOpen: false, fetchedColor: undefined
     },

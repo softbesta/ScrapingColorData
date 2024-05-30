@@ -11,7 +11,7 @@ const Dashboard = ({
   const [timerCount, setTimerCount] = useState(0)
   const timerRef = useRef(0)
 
-  const intervalSec = 3
+  const intervalSec = 1
 
   function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
@@ -20,7 +20,7 @@ const Dashboard = ({
     stopTimer()
     console.log('===timer started===')
     timerRef.current = setInterval(() => {
-      setTimerCount(v => v + 1)
+      setTimerCount(v => v + intervalSec)
     }, intervalSec * 1000)
   }
   const stopTimer = () => {

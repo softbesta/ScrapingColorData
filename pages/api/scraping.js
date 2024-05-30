@@ -15,8 +15,8 @@ let browser
 
 const connectBrowser = async () => {
   browser = await puppeteer.launch({
-    headless: false,
-    // headless: true,
+    // headless: false,
+    headless: true,
     defaultViewport: null,
     dumpio: true,
     defaultViewport: {
@@ -49,7 +49,7 @@ const closePages = async () => {
 }
 
 const getColorAtPosition = async (id, url, px, py) => {
-  const screenshotPath = path.join(process.cwd(), `screenshot${id}.png`)
+  const screenshotPath = path.join(process.cwd(), `/screenshots/screenshot${id}.png`)
 
   console.log({ px, py })
   const page = pages[id]
