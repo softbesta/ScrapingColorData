@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { CustomTable } from "./DataTable";
 
 const Dashboard = ({
   values,
@@ -50,11 +51,6 @@ const Dashboard = ({
       getColors()
     }
   }, [timerCount])
-
-  const onSave = async (id) => {
-    const selectedItem = values.find((item) => item.id === id)
-    console.log({ selectedItem })
-  }
 
   const getColors = async () => {
     isFetching.current = true
@@ -207,7 +203,7 @@ const Dashboard = ({
     }
   }
 
-  const handleOn = async () => {
+  const handleOnAll = async () => {
 
     if (!isConnected) {
       setIsLoading(true)
@@ -224,16 +220,17 @@ const Dashboard = ({
       setIsLoading(false)
     }
     setIsConnected(v => !v)
+
     return
   }
 
 
-  const onChange = (e, id) => {
+  const onTblChange = (e, siteId) => {
     const field = e.target.name
     const value = e.target.value
     setValues((v) =>
       v.map((item) => {
-        if (item.id === id) {
+        if (item.siteId === siteId) {
           return { ...item, [field]: value }
         } else {
           return item
@@ -241,97 +238,51 @@ const Dashboard = ({
       })
     )
   }
+  const onToogleItem = (siteId) => {
+    const value = values.find(v => v.siteId === siteId)
+    if (!value) return
+    console.log({value})
+    const update = values.map(v => {
+      if (v.siteId === siteId) {
+        return {...v, isOpen: !v.isOpen}
+      }
+      return v
+    })
+    setValues(update)
+  }
+  const onRemoveItem = (siteId) => {
+    const idx = values.findIndex(v => v.siteId === siteId)
+    if (idx < 0) return
+    const update = [...values]
+    update.splice(idx, 1)
+    console.log({idx, update})
+    setValues(update)
+  }
 
   return (
-    <div className="content">
-      <table>
-        <thead>
-          <tr>
-            <th>N°</th>
-            <th>URL</th>
-            <th>Status</th>
-            <th>X</th>
-            <th>Y</th>
-            <th>COR HTML PADRÃO</th>
-            <th>Time Update</th>
-            {/* <th>ACTION</th> */}
-          </tr>
-        </thead>
-        <tbody>
-          {values && values.map((entry) => (
-            <tr key={entry.id}>
-              <td>{entry.id}</td>
-              <td>
-                <input
-                  type="text"
-                  name="url"
-                  value={entry.url}
-                  onChange={(e) => onChange(e, entry.id)}
-                  disabled={isConnected}
-                />
-              </td>
-              <td
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                {/* <input
-                  type="text"
-                  name="isOpen"
-                  value={entry.isOpen}
-                  onChange={(e) => onChange(e, entry.id)}
-                /> */}
-                <div
-                  style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: '100%',
-                    backgroundColor: entry.isOpen ? 'green' : 'red',
-                  }}
-                />
-              </td>
-              <td><input type="number" name="x" value={entry.x} onChange={(e) => onChange(e, entry.id)} /></td>
-              <td><input type="number" name="y" value={entry.y} onChange={(e) => onChange(e, entry.id)} /></td>
-              <td
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <div
-                  style={{
-                    width: 40,
-                    height: 40,
-                    backgroundColor: `${entry.fetchedColor}`,
-                  }}
-                />
-                {/* <input
-                  type="text"
-                  name="color"
-                  value={entry.color}
-                  onChange={(e) => onChange(e, entry.id)}
-                /> */}
-              </td>
-              <td>
-                {entry.diffSec}
-              </td>
-              {/* <td><button onClick={() => onSave(entry.id)}>SAVE</button></td> */}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="dashboard">
+      <div className="container">
+        <CustomTable
+          rows={values}
+          onChange={(_event, siteId) => onTblChange(_event, siteId)}
+          onToggleItem={(siteId) => onToogleItem(siteId)}
+          onRemoveItem={(siteId) => onRemoveItem(siteId)}
+        />
+        {/* <div className={'titles'}>
+          <button onClick={() => {
+            console.log({values})
+          }}>Test</button>
+        </div> */}
+      </div>
       <button
         className={`on-button ${isConnected ? 'btnOff' : ''} ${isLoading ? 'btnDisabled' : ''}`}
-        onClick={handleOn}
+        onClick={handleOnAll}
         disabled={isLoading}
       >
         {isLoading ?
           'Loading'
           :
-          !isConnected ? 'Turn On' : 'Turn Off'
+          !isConnected ? 'Turn On (All)' : 'Turn Off (All)'
         }
       </button>
     </div>

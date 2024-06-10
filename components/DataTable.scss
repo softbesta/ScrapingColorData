@@ -1,0 +1,47 @@
+.tblcontainer {
+  .datatable {
+    margin-top: 20px;
+    border: 1px solid rgb(197, 197, 197);
+    min-height: 450px;
+    div [data-column-id] {
+      // background-color: aqua;
+      font-size: 16px;
+      text-align: center;
+      width: 100%;
+      white-space: initial;
+    }
+  }
+
+}
+
+
+.inputText {
+  width: 100%;
+}
+
+.btnToogleOn {
+  background-color: #5481ff;
+  color: white;
+  border: none;
+  padding: 5px;
+  border-radius: 10px;
+  // margin-top: 20px;
+  cursor: pointer;
+}
+.btnRemove {
+  margin-left: 10px;
+  background-color: transparent;
+  border: 1px solid gray;
+  width: 30px;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 5px;
+}
+.btnDisabled {
+  background-color: rgb(167, 167, 167) !important;
+  cursor: default;
+}
+.btnOff {
+  background-color: rgb(207, 74, 74);
+}

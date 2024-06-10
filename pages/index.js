@@ -11,56 +11,26 @@ const inter = Inter({ subsets: ["latin"] })
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false)
   const prevTime = useRef((new Date()).valueOf())
+  const initValue = {
+    siteId: 10, url: '', x: '', y: '', width: 100, height: 100,
+    lastUpdatedAt: '', diffSec: 0,
+    isOpen: false, isLoading: false, fetchedColor: ''
+  }
   const initValues = [
     {
-      id: 1, url: 'https://betclic.pt/', x: 300, y: 300,
-      lastUpdatedAt: undefined, diffSec: 0,
-      isOpen: false, fetchedColor: undefined
+      siteId: 1, url: 'https://betclic.pt/', x: 300, y: 300, width: 100, height: 100,
+      lastUpdatedAt: '', diffSec: 0,
+      isOpen: false, isLoading: false, fetchedColor: ''
     },
     {
-      id: 2, url: 'https://placard.pt/', x: 400, y: 200,
-      lastUpdatedAt: undefined, diffSec: 0,
-      isOpen: false, fetchedColor: undefined
+      siteId: 2, url: 'https://placard.pt/', x: 400, y: 200, width: 100, height: 100,
+      lastUpdatedAt: '', diffSec: 0,
+      isOpen: false, isLoading: false, fetchedColor: ''
     },
     {
-      id: 3, url: 'https://placard.pt/', x: 200, y: 200,
-      lastUpdatedAt: undefined, diffSec: 0,
-      isOpen: false, fetchedColor: undefined
-    },
-    {
-      id: 4, url: '', x: undefined, y: undefined,
-      lastUpdatedAt: undefined, diffSec: 0,
-      isOpen: false, fetchedColor: undefined
-    },
-    {
-      id: 5, url: '', x: undefined, y: undefined,
-      lastUpdatedAt: undefined, diffSec: 0,
-      isOpen: false, fetchedColor: undefined
-    },
-    {
-      id: 6, url: '', x: undefined, y: undefined,
-      lastUpdatedAt: undefined, diffSec: 0,
-      isOpen: false, fetchedColor: undefined
-    },
-    {
-      id: 7, url: '', x: undefined, y: undefined,
-      lastUpdatedAt: undefined, diffSec: 0,
-      isOpen: false, fetchedColor: undefined
-    },
-    {
-      id: 8, url: '', x: undefined, y: undefined,
-      lastUpdatedAt: undefined, diffSec: 0,
-      isOpen: false, fetchedColor: undefined
-    },
-    {
-      id: 9, url: '', x: undefined, y: undefined,
-      lastUpdatedAt: undefined, diffSec: 0,
-      isOpen: false, fetchedColor: undefined
-    },
-    {
-      id: 10, url: '', x: undefined, y: undefined,
-      lastUpdatedAt: undefined, diffSec: 0,
-      isOpen: false, fetchedColor: undefined
+      siteId: 3, url: 'https://placard.pt/', x: 200, y: 200, width: 100, height: 100,
+      lastUpdatedAt: '', diffSec: 0,
+      isOpen: false, isLoading: false, fetchedColor: ''
     },
   ]
   const [values, setValues] = useState(initValues)
@@ -75,27 +45,24 @@ export default function Home() {
     }
   }, [])
 
-  const handleChange = (e, id) => {
-    const field = e.target.name
-    const value = e.target.value
-    setValues((v) =>
-      v.map((item) => {
-        if (item.id === id) {
-          return { ...item, [field]: value }
-        } else {
-          return item
-        }
-      })
-    )
-  }
-
-  const handleTab = (id) => {
-    setTab(id)
+  const onAddValue = () => {
+    const update = initValue
+    const siteId = Math.max(...values.map(v => v.siteId)) + 1
+    update.siteId = siteId
+    setValues(v => ([...v, update]))
   }
 
   return (
     <div className="app">
-      <h1>REBEL TRADE SOFTWARE</h1>
+      <div className="appTitle">
+        <h1>REBEL TRADE SOFTWARE</h1>
+        <button
+          className="btnAdd"
+          onClick={() => onAddValue()}
+        >
+          Add Item
+        </button>
+      </div>
       {/* <div className="tabs">
         <button className="tab" onClick={() => handleTab(0)}>DASHBOARD</button>
         <button className="tab" onClick={() => handleTab(1)}>RELATÓRIOS</button>

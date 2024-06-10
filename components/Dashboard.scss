@@ -1,0 +1,66 @@
+// .container {
+//   display: flex;
+//   width: 59%;
+// }
+
+.dashboard {
+  display: block;
+  // height: 100%;
+
+  .titles {
+    font-size: 30px;
+  }
+  
+  .tabs {
+    margin-bottom: 20px;
+  }
+  
+  .tab {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .tab:nth-child(2) {
+    background-color: #008CBA;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .th,
+  .td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  .th {
+    background-color: #f2f2f2;
+  }
+
+  .on-button {
+    background-color: #5481ff;
+    color: white;
+    border: none;
+    padding: 20px;
+    border-radius: 34px;
+    font-size: 24px;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+
+  .btnDisabled {
+    background-color: rgb(167, 167, 167) !important;
+    cursor: default;
+  }
+
+  .btnOff {
+    background-color: rgb(207, 74, 74);
+  }
+
+}
