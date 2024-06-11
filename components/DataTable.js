@@ -1,6 +1,7 @@
 
 import DataTable from "react-data-table-component";
 import Image from 'next/image'
+import { useEffect, useState } from "react";
 // import NoImage from "../screenshots/noimage.png";
 
 const ToggleButton = () => {
@@ -14,6 +15,12 @@ export const CustomTable = ({
   onRemoveItem,
   onPickImageItem,
 }) => {
+  // To avoid issue - Next.js warning for SSR
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   const columns = [
     // {
     //   name: "ID",
@@ -28,10 +35,7 @@ export const CustomTable = ({
       // sortable: true,
       width: '200px',
       cell: (row) => {
-        return <div
-          style={{
-          }}
-        >
+        return <div>
           <input
             className="inputText"
             type="text"
@@ -49,15 +53,16 @@ export const CustomTable = ({
       width: '50px',
       compact: 'true',
       cell: (row) => {
-        return <div
+        return hasMounted ? <div
           style={{
             width: '40px',
             height: '40px',
             backgroundColor: `${row.isOpen ? 'green' : 'red'}`,
             borderRadius: 100,
           }}
-        >
-        </div>
+        />
+          :
+          <div />
       },
     },
     {
@@ -67,10 +72,7 @@ export const CustomTable = ({
       width: '100px',
       compact: 'true',
       cell: (row) => {
-        return <div
-          style={{
-          }}
-        >
+        return <div>
           <input
             className="inputText"
             type="text"
@@ -87,10 +89,7 @@ export const CustomTable = ({
       // sortable: true,
       width: '100px',
       cell: (row) => {
-        return <div
-          style={{
-          }}
-        >
+        return <div>
           <input
             className="inputText"
             type="text"
@@ -107,10 +106,7 @@ export const CustomTable = ({
       // sortable: true,
       width: '100px',
       cell: (row) => {
-        return <div
-          style={{
-          }}
-        >
+        return <div>
           <input
             className="inputText"
             type="text"
@@ -127,10 +123,7 @@ export const CustomTable = ({
       // sortable: true,
       width: '100px',
       cell: (row) => {
-        return <div
-          style={{
-          }}
-        >
+        return <div>
           <input
             className="inputText"
             type="text"
@@ -148,7 +141,7 @@ export const CustomTable = ({
       center: 'true',
       compact: 'true',
       cell: (row) => {
-        return <div
+        return hasMounted ? <div
           style={{
             width: '40px',
             height: '40px',
@@ -157,8 +150,9 @@ export const CustomTable = ({
             backgroundSize: '100% 100%',
           }}
           onClick={() => onPickImageItem(row.siteId)}
-        >
-        </div>
+        />
+          :
+          <div />
       },
       // sortable: true,
     },
@@ -169,15 +163,16 @@ export const CustomTable = ({
       center: 'true',
       compact: 'true',
       cell: (row) => {
-        return <span
+        return hasMounted ? <div
           style={{
             width: '40px',
             height: '40px',
             border: '1px solid gray',
             backgroundColor: `${row.fetchedColor ?? ''}`,
           }}
-        >
-        </span>
+        />
+          :
+          <div />
       },
       // sortable: true,
     },
@@ -216,25 +211,7 @@ export const CustomTable = ({
       sortable: true,
     },
   ]
-  const NoImage = '/screenshots/noimage.png'
   return <div className="tblcontainer">
-    <div
-      // style={{
-      //   width: '400px',
-      //   height: '400px',
-      //   border: '1px solid gray',
-      //   background: `url(https://prnt.sc/Eh2q0f3voJkF)`,
-      //   backgroundSize: '100px 100px',
-      // }}
-    >
-      <Image
-        src={'/screenshots/noimage.png'}
-        alt=""
-        width={100}
-        height={100}
-        onClick={() => onPickImageItem(1)}
-      />
-    </div>
     <DataTable
       className="datatableConatiner"
       columns={columns}

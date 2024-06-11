@@ -8,6 +8,12 @@ export const ImageModal = ({ isOpen, data, onClose, onOk }) => {
   const [siteItem, setSiteItem] = useState(data)
   const [isDragging, setIsDragging] = useState(false)
 
+  // To avoid issue - Next.js warning for SSR
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   const handleClose = () => {
     setIsDragging(false)
     onClose()
@@ -96,12 +102,12 @@ export const ImageModal = ({ isOpen, data, onClose, onOk }) => {
       <img
         className="imageModalSource"
         ref={imgRef}
-        src={data?.imgUrl}
+        src={data?.imgUrl ?? ''}
         alt="new Image"
         onMouseDown={handleMouseDown}
         onDragStart={(e) => e.preventDefault()}
       />
-      <div
+      {hasMounted && <div
         style={{
           position: 'absolute',
           width: siteItem?.width ?? 0,
@@ -112,7 +118,8 @@ export const ImageModal = ({ isOpen, data, onClose, onOk }) => {
           border: '1px dashed black',
           zIndex: 100,
         }}
-      />
+        onMouseDown={handleMouseDown}
+      />}
     </div>
   </ReactModal>
 }
