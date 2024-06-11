@@ -1,0 +1,42 @@
+.imageModalContainer {}
+
+.imageModalPortal {
+  z-index: 5;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+
+  .btnGroup {
+    display: flex;
+    gap: 20px;
+    position: absolute;
+    right: 10%;
+    
+
+    .primary-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btnOk {
+      background-color: #0070f322;
+      &:hover {
+        background-color: #0070f3aa;
+      }
+    }
+    .btnClose {
+      background-color: #f3000022;
+      &:hover {
+        background-color: #0070f3aa;
+      }
+    }
+  }
+  .imageModalSource {
+    user-select: none;
+    // pointer-events: none;
+  }
+}

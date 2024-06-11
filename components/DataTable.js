@@ -1,5 +1,7 @@
 
 import DataTable from "react-data-table-component";
+import Image from 'next/image'
+// import NoImage from "../screenshots/noimage.png";
 
 const ToggleButton = () => {
 
@@ -10,6 +12,7 @@ export const CustomTable = ({
   onChange,
   onToggleItem,
   onRemoveItem,
+  onPickImageItem,
 }) => {
   const columns = [
     // {
@@ -139,8 +142,29 @@ export const CustomTable = ({
       }
     },
     {
+      name: "Preview",
+      // selector: (row) => row.imgUrl,
+      width: '100px',
+      center: 'true',
+      compact: 'true',
+      cell: (row) => {
+        return <div
+          style={{
+            width: '40px',
+            height: '40px',
+            border: '1px solid gray',
+            backgroundImage: `url(${row.imgUrl ?? '/screenshots/screenshot2.png'})`,
+            backgroundSize: '100% 100%',
+          }}
+          onClick={() => onPickImageItem(row.siteId)}
+        >
+        </div>
+      },
+      // sortable: true,
+    },
+    {
       name: "COR HTML PADRÃO",
-      selector: (row) => row.fetchedColor,
+      // selector: (row) => row.fetchedColor,
       width: '100px',
       center: 'true',
       compact: 'true',
@@ -192,9 +216,27 @@ export const CustomTable = ({
       sortable: true,
     },
   ]
+  const NoImage = '/screenshots/noimage.png'
   return <div className="tblcontainer">
+    <div
+      // style={{
+      //   width: '400px',
+      //   height: '400px',
+      //   border: '1px solid gray',
+      //   background: `url(https://prnt.sc/Eh2q0f3voJkF)`,
+      //   backgroundSize: '100px 100px',
+      // }}
+    >
+      <Image
+        src={'/screenshots/noimage.png'}
+        alt=""
+        width={100}
+        height={100}
+        onClick={() => onPickImageItem(1)}
+      />
+    </div>
     <DataTable
-      className="datatable"
+      className="datatableConatiner"
       columns={columns}
       data={rows}
       fixedHeader

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CustomTable } from "./DataTable";
+import ReactModal from "react-modal";
+import { ImageModal } from "./ImageModal";
 
 const Dashboard = ({
   values,
@@ -25,7 +27,7 @@ const Dashboard = ({
   function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
   }
-  const startTImer = () => {
+  const startTimer = () => {
     stopTimer()
     console.log('===timer started===')
     timerRef.current = setInterval(() => {
@@ -40,7 +42,6 @@ const Dashboard = ({
       setTimerCount(0)
     }
   }
-
   useEffect(() => {
     return () => stopTimer()
   }, [])
@@ -48,179 +49,173 @@ const Dashboard = ({
     if (timerCount > 0) {
       console.log({ timerCount })
       if (isFetching.current) return
-      getColors()
+      // getColors()
     }
   }, [timerCount])
+// 
+  // const getColors = async () => {
+  //   isFetching.current = true
+  //   console.log('===getColors===')
+  //   try {
+  //     const items = []
+  //     valuesRef.current.forEach(item => {
+  //       if (!item || !item.url || !item.x || !item.y) return
+  //       items.push({
+  //         id: item.id,
+  //         url: item.url,
+  //         position: {
+  //           x: +item.x,
+  //           y: +item.y,
+  //         }
+  //       })
+  //     })
+  //     const data = {
+  //       status: 'get',
+  //       items
+  //     }
 
-  const getColors = async () => {
-    isFetching.current = true
-    console.log('===getColors===')
-    try {
-      const items = []
-      valuesRef.current.forEach(item => {
-        if (!item || !item.url || !item.x || !item.y) return
-        items.push({
-          id: item.id,
-          url: item.url,
-          position: {
-            x: +item.x,
-            y: +item.y,
-          }
-        })
-      })
-      const data = {
-        status: 'get',
-        items
-      }
+  //     const response = await fetch(`/api/scraping/`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(data)
+  //     })
 
-      const response = await fetch(`/api/scraping/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      })
+  //     if (!response.ok) {
+  //       isFetching.current = false
+  //       throw new Error(response.statusText)
+  //     }
 
-      if (!response.ok) {
-        isFetching.current = false
-        throw new Error(response.statusText)
-      }
+  //     const res = await response.json()
+  //     const resData = res.data
+  //     if (!resData || resData.length <= 0) return
 
-      const res = await response.json()
-      const resData = res.data
-      if (!resData || resData.length <= 0) return
+  //     const update = valuesRef.current.map(item => {
+  //       const idx = resData.findIndex(color => color.id === item.id)
+  //       if (idx < 0) return {
+  //         ...item,
+  //         isOpen: false,
+  //       }
+  //       const color = `rgb(${resData[idx].color.r}, ${resData[idx].color.g}, ${resData[idx].color.b})`
+  //       if (color === item.fetchedColor) return item
 
-      const update = valuesRef.current.map(item => {
-        const idx = resData.findIndex(color => color.id === item.id)
-        if (idx < 0) return {
-          ...item,
-          isOpen: false,
-        }
-        const color = `rgb(${resData[idx].color.r}, ${resData[idx].color.g}, ${resData[idx].color.b})`
-        if (color === item.fetchedColor) return item
+  //       const lastUpdatedAt = (new Date()).valueOf()
+  //       let diffSec = 0
+  //       if (item.lastUpdatedAt > 0) {
+  //         diffSec = (lastUpdatedAt - item.lastUpdatedAt) / 1000
+  //       }
+  //       return {
+  //         ...item,
+  //         fetchedColor: color,
+  //         lastUpdatedAt,
+  //         diffSec,
+  //         isOpen: true,
+  //       }
 
-        const lastUpdatedAt = (new Date()).valueOf()
-        let diffSec = 0
-        if (item.lastUpdatedAt > 0) {
-          diffSec = (lastUpdatedAt - item.lastUpdatedAt) / 1000
-        }
-        return {
-          ...item,
-          fetchedColor: color,
-          lastUpdatedAt,
-          diffSec,
-          isOpen: true,
-        }
+  //     })
+  //     // console.log({ update })
+  //     setValues(update)
 
-      })
-      // console.log({ update })
-      setValues(update)
+  //     isFetching.current = false
+  //   } catch (err) {
+  //     isFetching.current = false
+  //   }
+  // }
+  // const openAllPages = async () => {
+  //   try {
+  //     const items = []
+  //     valuesRef.current.forEach(item => {
+  //       if (!item || !item.url || !item.x || !item.y) return
+  //       items.push({
+  //         id: item.id,
+  //         url: item.url,
+  //         position: {
+  //           x: +item.x,
+  //           y: +item.y,
+  //         }
+  //       })
+  //     })
+  //     const data = {
+  //       status: 'open',
+  //       items
+  //     }
+  //     // const response = await fetch(`/api/scraping/`, {
+  //     //   method: 'POST',
+  //     //   headers: {
+  //     //     'Content-Type': 'application/json',
+  //     //   },
+  //     //   body: JSON.stringify(data)
+  //     // })
+  //     if (!response.ok) {
+  //       throw new Error(response.statusText)
+  //     }
+  //     const res = await response.json()
+  //     const resData = res.data
+  //     if (!resData || resData.length <= 0) return
+  //     // console.log('fffffffffff', { resData })
 
-      isFetching.current = false
-    } catch (err) {
-      isFetching.current = false
-    }
-  }
+  //     const update = valuesRef.current.map(item => {
+  //       const idx = resData.findIndex(color => color.id === item.id)
+  //       if (idx < 0) return item
+  //       return {
+  //         ...item,
+  //         isOpen: resData[idx].isOpen,
+  //       }
 
-  const openAllPages = async () => {
-    try {
-      const items = []
-      valuesRef.current.forEach(item => {
-        if (!item || !item.url || !item.x || !item.y) return
-        items.push({
-          id: item.id,
-          url: item.url,
-          position: {
-            x: +item.x,
-            y: +item.y,
-          }
-        })
-      })
-      const data = {
-        status: 'open',
-        items
-      }
-      const response = await fetch(`/api/scraping/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      })
-      if (!response.ok) {
-        throw new Error(response.statusText)
-      }
-      const res = await response.json()
-      const resData = res.data
-      if (!resData || resData.length <= 0) return
-      // console.log('fffffffffff', { resData })
+  //     })
+  //     // console.log('vvvvvvvvv', { update })
+  //     setValues(update)
 
-      const update = valuesRef.current.map(item => {
-        const idx = resData.findIndex(color => color.id === item.id)
-        if (idx < 0) return item
-        return {
-          ...item,
-          isOpen: resData[idx].isOpen,
-        }
+  //   } catch (err) {
+  //   }
 
-      })
-      // console.log('vvvvvvvvv', { update })
-      setValues(update)
+  // }
+  // const closeAllPages = async () => {
+  //   try {
+  //     // const data = {
+  //     //   status: 'close',
+  //     // }
+  //     // const response = await fetch(`/api/scraping/`, {
+  //     //   method: 'POST',
+  //     //   headers: {
+  //     //     'Content-Type': 'application/json',
+  //     //   },
+  //     //   body: JSON.stringify(data)
+  //     // })
+  //     // if (!response.ok) {
+  //     //   throw new Error(response.statusText)
+  //     // }
+  //     // const res = await response.json()
+  //     // const resData = res.data
+  //     // if (!resData || resData.length <= 0) return
 
-    } catch (err) {
-    }
-
-  }
-
-  const closeAllPages = async () => {
-    try {
-      const data = {
-        status: 'close',
-      }
-      const response = await fetch(`/api/scraping/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      })
-      if (!response.ok) {
-        throw new Error(response.statusText)
-      }
-      const res = await response.json()
-      const resData = res.data
-      if (!resData || resData.length <= 0) return
-
-      const update = valuesRef.current.map(item => {
-        return {
-          ...item,
-          isOpen: false,
-        }
-      })
-      // console.log({ update })
-      setValues(update)
-    } catch (err) {
-    }
-  }
-
+  //     // const update = valuesRef.current.map(item => {
+  //     //   return {
+  //     //     ...item,
+  //     //     isOpen: false,
+  //     //   }
+  //     // })
+  //     // // console.log({ update })
+  //     // setValues(update)
+  //   } catch (err) {
+  //   }
+  // }
   const handleOnAll = async () => {
-
     if (!isConnected) {
       setIsLoading(true)
-      await openAllPages()
-      await delay(2000)
-      startTImer()
+      // await openAllPages()
+      // await delay(2000)
+      startTimer()
       setIsLoading(false)
     } else {
       setIsLoading(true)
       stopTimer()
-      await delay(5000)
-      await closeAllPages()
-      // closeAllPages()
+      // await delay(5000)
+      // await closeAllPages()
       setIsLoading(false)
     }
     setIsConnected(v => !v)
-
     return
   }
 
@@ -241,10 +236,9 @@ const Dashboard = ({
   const onToogleItem = (siteId) => {
     const value = values.find(v => v.siteId === siteId)
     if (!value) return
-    console.log({value})
     const update = values.map(v => {
       if (v.siteId === siteId) {
-        return {...v, isOpen: !v.isOpen}
+        return { ...v, isOpen: !v.isOpen }
       }
       return v
     })
@@ -255,8 +249,29 @@ const Dashboard = ({
     if (idx < 0) return
     const update = [...values]
     update.splice(idx, 1)
-    console.log({idx, update})
     setValues(update)
+  }
+
+  
+  const [modalItem, setModalItem] = useState()
+  const onPickImageItem = (siteId) => {
+    const idx = values.findIndex(v => v.siteId === siteId)
+    if (idx < 0) return
+    const value = values[idx]
+    setModalItem(value)
+  }
+  const onImageModalClose = () => {
+    setModalItem()
+  }
+  const onImageModalOk = (item) => {
+    const update = values.map(v => {
+      if (v.siteId === item.siteId) {
+        return item
+      }
+      return v
+    })
+    setValues(update)
+    setModalItem()
   }
 
   return (
@@ -267,12 +282,8 @@ const Dashboard = ({
           onChange={(_event, siteId) => onTblChange(_event, siteId)}
           onToggleItem={(siteId) => onToogleItem(siteId)}
           onRemoveItem={(siteId) => onRemoveItem(siteId)}
+          onPickImageItem={(siteId) => { onPickImageItem(siteId) }}
         />
-        {/* <div className={'titles'}>
-          <button onClick={() => {
-            console.log({values})
-          }}>Test</button>
-        </div> */}
       </div>
       <button
         className={`on-button ${isConnected ? 'btnOff' : ''} ${isLoading ? 'btnDisabled' : ''}`}
@@ -282,9 +293,17 @@ const Dashboard = ({
         {isLoading ?
           'Loading'
           :
+          // 'Refresh'
           !isConnected ? 'Turn On (All)' : 'Turn Off (All)'
         }
       </button>
+
+      {modalItem?.imgUrl && <ImageModal
+        isOpen={true}
+        data={modalItem}
+        onClose={onImageModalClose}
+        onOk={onImageModalOk}
+      />}
     </div>
   )
 };

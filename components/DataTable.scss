@@ -1,5 +1,5 @@
 .tblcontainer {
-  .datatable {
+  .datatableConatiner {
     margin-top: 20px;
     border: 1px solid rgb(197, 197, 197);
     min-height: 450px;
@@ -9,6 +9,10 @@
       text-align: center;
       width: 100%;
       white-space: initial;
+    }
+
+    .rdt_TableHead {
+      z-index: inherit;
     }
   }
 

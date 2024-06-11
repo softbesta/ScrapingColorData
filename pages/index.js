@@ -14,23 +14,27 @@ export default function Home() {
   const initValue = {
     siteId: 10, url: '', x: '', y: '', width: 100, height: 100,
     lastUpdatedAt: '', diffSec: 0,
-    isOpen: false, isLoading: false, fetchedColor: ''
+    isOpen: false, isLoading: false, fetchedColor: '',
+    imgUrl: '',
   }
   const initValues = [
     {
       siteId: 1, url: 'https://betclic.pt/', x: 300, y: 300, width: 100, height: 100,
       lastUpdatedAt: '', diffSec: 0,
-      isOpen: false, isLoading: false, fetchedColor: ''
+      isOpen: false, isLoading: false, fetchedColor: '',
+      imgUrl: 'https://picsum.photos/id/237/1920/1080',
     },
     {
       siteId: 2, url: 'https://placard.pt/', x: 400, y: 200, width: 100, height: 100,
       lastUpdatedAt: '', diffSec: 0,
-      isOpen: false, isLoading: false, fetchedColor: ''
+      isOpen: false, isLoading: false, fetchedColor: '',
+      imgUrl: 'https://picsum.photos/id/237/1920/1080',
     },
     {
       siteId: 3, url: 'https://placard.pt/', x: 200, y: 200, width: 100, height: 100,
       lastUpdatedAt: '', diffSec: 0,
-      isOpen: false, isLoading: false, fetchedColor: ''
+      isOpen: false, isLoading: false, fetchedColor: '',
+      imgUrl: 'https://picsum.photos/id/237/1920/1080',
     },
   ]
   const [values, setValues] = useState(initValues)
@@ -38,7 +42,6 @@ export default function Home() {
 
   useEffect(() => {
     const urlValues = localStorage.getItem('urlValues')
-    console.log({ urlValues })
     const update = JSON.parse(urlValues)
     if (update.length > 0) {
       setValues(update)
