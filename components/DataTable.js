@@ -46,8 +46,8 @@ const CustomTable = ({
       },
     },
   };
-  const maxCount = 14
-  const labels = ['1', '2', '3', '4', '5', '1', '2', '3', '4', '5', '1', '2', '3', '4', '5', '1', '2', '3', '4', '5'].slice(-maxCount);
+  const maxCount = 30
+  const labels = Array.from(Array(30).keys()).map(v => v + 1).slice(-maxCount);
   const pointColors = ['#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3'].slice(-maxCount)
   const oddsData = [345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459].slice(-maxCount)
   const data = {
@@ -76,7 +76,7 @@ const CustomTable = ({
       // sortable: true,
       width: '38px',
       cell: (row) => {
-        return <div className="inputText">
+        return <div className="InputBox inputText">
           {row.siteId}
         </div>
       },
@@ -112,7 +112,7 @@ const CustomTable = ({
       // sortable: true,
       width: '200px',
       cell: (row) => {
-        return <div className="inputText">
+        return <div className="InputBox inputText">
           <input
             type="text"
             name='url'
@@ -149,7 +149,7 @@ const CustomTable = ({
       width: '70px',
       compact: 'true',
       cell: (row) => {
-        return <div className="inputText">
+        return <div className="InputBox inputText">
           <input
             className="textRight"
             type="text"
@@ -167,7 +167,7 @@ const CustomTable = ({
       width: '70px',
       compact: 'true',
       cell: (row) => {
-        return <div className="inputText">
+        return <div className="InputBox inputText">
           <input
             className="textRight"
             type="text"
@@ -185,7 +185,7 @@ const CustomTable = ({
       width: '70px',
       compact: 'true',
       cell: (row) => {
-        return <div className="inputText">
+        return <div className="InputBox inputText">
           <input
             className="textRight"
             type="text"
@@ -203,7 +203,7 @@ const CustomTable = ({
       width: '70px',
       compact: 'true',
       cell: (row) => {
-        return <div className="inputText">
+        return <div className="InputBox inputText">
           <input
             className="textRight"
             type="text"
@@ -213,25 +213,6 @@ const CustomTable = ({
           />
         </div>
       }
-    },
-    {
-      name: "Fetch Time",
-      selector: (row) => row.diffSec,
-      width: '70px',
-      center: 'true',
-      compact: 'true',
-      cell: (row) => {
-        return <div className="inputText textRight">
-          <input
-            className="textRight"
-            type="text"
-            name='diffSec'
-            value={row.diffSec}
-            onChange={(e) => onChange(e, row.siteId)}
-          />
-        </div>
-      },
-      // sortable: true,
     },
     {
       name: "Preview",
@@ -255,37 +236,37 @@ const CustomTable = ({
       },
       // sortable: true,
     },
-    {
-      name: "COR HTML PADRÃO",
-      // selector: (row) => row.fetchedColor,
-      width: '100px',
-      center: 'true',
-      compact: 'true',
-      cell: (row) => {
-        return hasMounted ? <div
-          style={{
-            width: '40px',
-            height: '40px',
-            border: '1px solid gray',
-            backgroundColor: `${row.fetchedColor ?? ''}`,
-          }}
-        />
-          :
-          <div />
-      },
-      // sortable: true,
-    },
-    {
-      name: "Time Updated",
-      selector: (row) => row.diffSec,
-      width: '70px',
-      center: 'true',
-      compact: 'true',
-      cell: (row) => {
-        return <div>{row.diffSec}</div>
-      },
-      // sortable: true,
-    },
+    // {
+    //   name: "COR HTML PADRÃO",
+    //   // selector: (row) => row.fetchedColor,
+    //   width: '100px',
+    //   center: 'true',
+    //   compact: 'true',
+    //   cell: (row) => {
+    //     return hasMounted ? <div
+    //       style={{
+    //         width: '40px',
+    //         height: '40px',
+    //         border: '1px solid gray',
+    //         backgroundColor: `${row.fetchedColor ?? ''}`,
+    //       }}
+    //     />
+    //       :
+    //       <div />
+    //   },
+    //   // sortable: true,
+    // },
+    // {
+    //   name: "Time Updated",
+    //   selector: (row) => row.diffSec,
+    //   width: '70px',
+    //   center: 'true',
+    //   compact: 'true',
+    //   cell: (row) => {
+    //     return <div>{row.diffSec}</div>
+    //   },
+    //   // sortable: true,
+    // },
     {
       name: "Realtime Status",
       selector: (row) => row.diffSec,

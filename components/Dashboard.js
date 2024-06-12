@@ -12,6 +12,8 @@ const Dashboard = ({
   setIsConnected,
 }) => {
 
+  const [maxTime, setMaxTime] = useState(30)
+
   const [isLoading, setIsLoading] = useState(false)
   const isFetching = useRef(false)
   const [timerCount, setTimerCount] = useState(0)
@@ -287,9 +289,24 @@ const Dashboard = ({
           onPickImageItem={(siteId) => { onPickImageItem(siteId) }}
         />
       </div>
-      <div>
+      <div className="dashBtns">
+        <div className="InputBox fetchTimeInput">
+          <label for={'ttt'}>Fetch Time:</label>
+          <input
+            id="ttt"
+            className="textRight"
+            type="number"
+            value={maxTime}
+            onChange={(_e) => {
+              let update = Math.floor(_e.target.value)
+              if (update > 30) update = 30
+              else if (update < 1) update = 1
+              setMaxTime(update)
+            }}
+          />
+        </div>
         <button
-          className={`on-button ${isConnected ? 'btnOff' : ''} ${isLoading ? 'btnDisabled' : ''}`}
+          className={`btnTurnOnAll ${isConnected ? 'btnOff' : ''} ${isLoading ? 'btnDisabled' : ''}`}
           onClick={handleOnAll}
           disabled={isLoading}
         >

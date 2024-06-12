@@ -14,6 +14,35 @@
     overflow: hidden;
   }
 
+  .dashBtns {
+    position: relative;
+    margin-top: 20px;
+    .fetchTimeInput {
+      position: absolute;
+      left: 1%;
+      top: 20px;
+    }
+
+    .btnTurnOnAll {
+      background-color: #5481ff;
+      color: white;
+      border: none;
+      padding: 20px;
+      border-radius: 34px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .btnDisabled {
+      background-color: rgb(167, 167, 167) !important;
+      cursor: default;
+    }
+
+    .btnOff {
+      background-color: rgb(207, 74, 74);
+    }
+  }
+
   .titles {
     font-size: 30px;
   }
@@ -48,26 +77,6 @@
 
   .th {
     background-color: #f2f2f2;
-  }
-
-  .on-button {
-    background-color: #5481ff;
-    color: white;
-    border: none;
-    padding: 20px;
-    border-radius: 34px;
-    font-size: 24px;
-    margin-top: 20px;
-    cursor: pointer;
-  }
-
-  .btnDisabled {
-    background-color: rgb(167, 167, 167) !important;
-    cursor: default;
-  }
-
-  .btnOff {
-    background-color: rgb(207, 74, 74);
   }
 
 }
