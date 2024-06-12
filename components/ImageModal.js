@@ -81,7 +81,8 @@ export const ImageModal = ({ isOpen, data, onClose, onOk }) => {
 
   return <ReactModal
     isOpen={isOpen}
-    className={'imageModalPortal'}
+    overlayClassName={'imageModalOverlay'}
+    className={'imageModalContent'}
   // overlayClassName={'imageModalPortal'}
   >
     <div>

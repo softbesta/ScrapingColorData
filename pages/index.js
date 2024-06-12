@@ -1,3 +1,5 @@
+"use client"
+
 import Head from "next/head"
 import Image from "next/image"
 import { Inter } from "next/font/google"
@@ -57,26 +59,28 @@ export default function Home() {
 
   return (
     <div className="app">
-      <div className="appTitle">
-        <h1>REBEL TRADE SOFTWARE</h1>
-        <button
-          className="btnAdd"
-          onClick={() => onAddValue()}
-        >
-          Add Item
-        </button>
-      </div>
-      {/* <div className="tabs">
+      <div className="cardContainer">
+        <div className="appTitle">
+          <h1>REBEL TRADE SOFTWARE</h1>
+          <button
+            className="btnAdd"
+            onClick={() => onAddValue()}
+          >
+            Add Item
+          </button>
+        </div>
+        {/* <div className="tabs">
         <button className="tab" onClick={() => handleTab(0)}>DASHBOARD</button>
         <button className="tab" onClick={() => handleTab(1)}>RELATÓRIOS</button>
       </div> */}
-      {tab === 0 && <Dashboard
-        values={values}
-        setValues={setValues}
-        isConnected={isConnected}
-        setIsConnected={setIsConnected}
-      />}
-      {/* {tab === 1 && <Relations values={values} onChange={handleChange} />} */}
+        {tab === 0 && <Dashboard
+          values={values}
+          setValues={setValues}
+          isConnected={isConnected}
+          setIsConnected={setIsConnected}
+        />}
+        {/* {tab === 1 && <Relations values={values} onChange={handleChange} />} */}
+      </div>
     </div>
   )
 }

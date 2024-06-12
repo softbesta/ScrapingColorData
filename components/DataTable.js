@@ -1,20 +1,68 @@
-
+"use client"
 import DataTable from "react-data-table-component";
 import Image from 'next/image'
 import { useEffect, useState } from "react";
-// import NoImage from "../screenshots/noimage.png";
 
-const ToggleButton = () => {
+import dynamic from 'next/dynamic';
+// import 'chart.js/auto';
+import { Chart as ChartJS, LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js';
+ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-}
+// import {
+//   Chart as ChartJS,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Tooltip,
+//   Legend,
 
-export const CustomTable = ({
+//   CategoryScale,
+//   BarElement,
+//   Title,
+// } from 'chart.js';
+// import { Bar } from 'react-chartjs-2';
+const Line = dynamic(() => import('react-chartjs-2').then((mod) => mod.Line), {
+  ssr: false,
+});
+
+const CustomTable = ({
   rows,
   onChange,
   onToggleItem,
   onRemoveItem,
   onPickImageItem,
 }) => {
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+        // position: 'top',
+      },
+      title: {
+        display: false,
+        // text: 'Chart.js Bar Chart',
+      },
+    },
+  };
+  const maxCount = 14
+  const labels = ['1', '2', '3', '4', '5', '1', '2', '3', '4', '5', '1', '2', '3', '4', '5', '1', '2', '3', '4', '5'].slice(-maxCount);
+  const pointColors = ['#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3'].slice(-maxCount)
+  const oddsData = [345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459].slice(-maxCount)
+  const data = {
+    labels,
+    datasets: [
+      {
+        // label: 'Dataset 1',
+        data: oddsData,
+        pointBackgroundColor: pointColors,
+        pointRadius: 7,
+        hoverRadius: 10,
+      },
+    ],
+  };
+
   // To avoid issue - Next.js warning for SSR
   const [hasMounted, setHasMounted] = useState(false);
   useEffect(() => {
@@ -22,29 +70,58 @@ export const CustomTable = ({
   }, []);
 
   const columns = [
-    // {
-    //   name: "ID",
-    //   selector: (row) => row.siteId,
-    //   // sortable: true,
-    //   width: '18px',
-    //   compact: 'true',
-    // },
+    {
+      name: "ID",
+      // selector: (row) => row.siteId,
+      // sortable: true,
+      width: '38px',
+      cell: (row) => {
+        return <div className="inputText">
+          {row.siteId}
+        </div>
+      },
+      compact: 'true',
+    },
+    {
+      name: "Action",
+      // selector: (row) => row.isOpen,
+      width: '115px',
+      cell: (row) => {
+        return <div className="actionBtns">
+          <button
+            className={`btnToogleOn ${row.isOpen ? 'btnOff' : ''} ${row.isLoading ? 'btnDisabled' : ''}`}
+            onClick={() => onToggleItem(row.siteId)}
+            disabled={row.isLoading}
+          >
+            {row.isOpen ? 'Turn Off' : 'Turn On'}
+          </button>
+          <button
+            className="btnRemove"
+            onClick={() => onRemoveItem(row.siteId)}
+          >X</button>
+        </div>
+      },
+      ignoreRowClick: 'true',
+      button: 'true',
+      compact: 'true',
+      // sortable: true,
+    },
     {
       name: "URL",
       // selector: (row) => row.url,
       // sortable: true,
       width: '200px',
       cell: (row) => {
-        return <div>
+        return <div className="inputText">
           <input
-            className="inputText"
             type="text"
             name='url'
             value={row.url}
             onChange={(e) => onChange(e, row.siteId)}
           />
         </div>
-      }
+      },
+      compact: 'true',
     },
     {
       name: "Status",
@@ -69,12 +146,12 @@ export const CustomTable = ({
       name: "X",
       // selector: (row) => row.x,
       // sortable: true,
-      width: '100px',
+      width: '70px',
       compact: 'true',
       cell: (row) => {
-        return <div>
+        return <div className="inputText">
           <input
-            className="inputText"
+            className="textRight"
             type="text"
             name='x'
             value={row.x}
@@ -87,11 +164,12 @@ export const CustomTable = ({
       name: "Y",
       // selector: (row) => row.y,
       // sortable: true,
-      width: '100px',
+      width: '70px',
+      compact: 'true',
       cell: (row) => {
-        return <div>
+        return <div className="inputText">
           <input
-            className="inputText"
+            className="textRight"
             type="text"
             name='y'
             value={row.y}
@@ -104,11 +182,12 @@ export const CustomTable = ({
       name: "Width",
       // selector: (row) => row.width,
       // sortable: true,
-      width: '100px',
+      width: '70px',
+      compact: 'true',
       cell: (row) => {
-        return <div>
+        return <div className="inputText">
           <input
-            className="inputText"
+            className="textRight"
             type="text"
             name='width'
             value={row.width}
@@ -121,11 +200,12 @@ export const CustomTable = ({
       name: "Height",
       // selector: (row) => row.height,
       // sortable: true,
-      width: '100px',
+      width: '70px',
+      compact: 'true',
       cell: (row) => {
-        return <div>
+        return <div className="inputText">
           <input
-            className="inputText"
+            className="textRight"
             type="text"
             name='height'
             value={row.height}
@@ -135,9 +215,28 @@ export const CustomTable = ({
       }
     },
     {
+      name: "Fetch Time",
+      selector: (row) => row.diffSec,
+      width: '70px',
+      center: 'true',
+      compact: 'true',
+      cell: (row) => {
+        return <div className="inputText textRight">
+          <input
+            className="textRight"
+            type="text"
+            name='diffSec'
+            value={row.diffSec}
+            onChange={(e) => onChange(e, row.siteId)}
+          />
+        </div>
+      },
+      // sortable: true,
+    },
+    {
       name: "Preview",
       // selector: (row) => row.imgUrl,
-      width: '100px',
+      width: '80px',
       center: 'true',
       compact: 'true',
       cell: (row) => {
@@ -177,38 +276,37 @@ export const CustomTable = ({
       // sortable: true,
     },
     {
-      name: "Time Update",
+      name: "Time Updated",
       selector: (row) => row.diffSec,
-      width: '120px',
+      width: '70px',
       center: 'true',
       compact: 'true',
       cell: (row) => {
-        return <span>{row.diffSec}</span>
+        return <div>{row.diffSec}</div>
       },
       // sortable: true,
     },
     {
-      name: "Action",
-      // selector: (row) => row.isOpen,
-      width: '100px',
+      name: "Realtime Status",
+      selector: (row) => row.diffSec,
+      // width: '100%',
+      minWidth: '350px',
+      center: 'true',
+      compact: 'true',
       cell: (row) => {
-        return <div>
-          <button
-            className={`btnToogleOn ${row.isOpen ? 'btnOff' : ''} ${row.isLoading ? 'btnDisabled' : ''}`}
-            onClick={() => onToggleItem(row.siteId)}
-            disabled={row.isLoading}
-          >
-            {row.isOpen ? 'Turn Off' : 'Turn On'}
-          </button>
-          <button
-            className="btnRemove"
-            onClick={() => onRemoveItem(row.siteId)}
-          >X</button>
+        return <div
+          style={{
+            width: '100%',
+            height: 100,
+          }}
+        >
+          <Line
+            options={options}
+            data={data}
+          />
         </div>
       },
-      ignoreRowClick: 'true',
-      button: 'true',
-      sortable: true,
+      // sortable: true,
     },
   ]
   return <div className="tblcontainer">
@@ -217,7 +315,9 @@ export const CustomTable = ({
       columns={columns}
       data={rows}
       fixedHeader
-      fixedHeaderScrollHeight="60vh"
+    // fixedHeaderScrollHeight="60vh"
     />
   </div>
 }
+
+export default CustomTable

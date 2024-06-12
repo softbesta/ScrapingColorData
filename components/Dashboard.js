@@ -1,5 +1,7 @@
+"use client"
+
 import React, { useEffect, useRef, useState } from "react";
-import { CustomTable } from "./DataTable";
+import CustomTable from "./DataTable";
 import ReactModal from "react-modal";
 import { ImageModal } from "./ImageModal";
 
@@ -52,7 +54,7 @@ const Dashboard = ({
       // getColors()
     }
   }, [timerCount])
-// 
+  // 
   // const getColors = async () => {
   //   isFetching.current = true
   //   console.log('===getColors===')
@@ -252,7 +254,7 @@ const Dashboard = ({
     setValues(update)
   }
 
-  
+
   const [modalItem, setModalItem] = useState()
   const onPickImageItem = (siteId) => {
     const idx = values.findIndex(v => v.siteId === siteId)
@@ -276,7 +278,7 @@ const Dashboard = ({
 
   return (
     <div className="dashboard">
-      <div className="container">
+      <div className="dashContainer">
         <CustomTable
           rows={values}
           onChange={(_event, siteId) => onTblChange(_event, siteId)}
@@ -285,18 +287,20 @@ const Dashboard = ({
           onPickImageItem={(siteId) => { onPickImageItem(siteId) }}
         />
       </div>
-      <button
-        className={`on-button ${isConnected ? 'btnOff' : ''} ${isLoading ? 'btnDisabled' : ''}`}
-        onClick={handleOnAll}
-        disabled={isLoading}
-      >
-        {isLoading ?
-          'Loading'
-          :
-          // 'Refresh'
-          !isConnected ? 'Turn On (All)' : 'Turn Off (All)'
-        }
-      </button>
+      <div>
+        <button
+          className={`on-button ${isConnected ? 'btnOff' : ''} ${isLoading ? 'btnDisabled' : ''}`}
+          onClick={handleOnAll}
+          disabled={isLoading}
+        >
+          {isLoading ?
+            'Loading'
+            :
+            // 'Refresh'
+            !isConnected ? 'Turn On (All)' : 'Turn Off (All)'
+          }
+        </button>
+      </div>
 
       {modalItem?.imgUrl && <ImageModal
         isOpen={true}
