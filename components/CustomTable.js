@@ -31,6 +31,8 @@ const CustomTable = ({
   onToggleItem,
   onRemoveItem,
   onPickImageItem,
+  maxSecond = 30,
+  logData,
 }) => {
   const options = {
     responsive: true,
@@ -46,22 +48,21 @@ const CustomTable = ({
       },
     },
   };
-  const maxCount = 30
-  const labels = Array.from(Array(30).keys()).map(v => v + 1).slice(-maxCount);
-  const pointColors = ['#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3'].slice(-maxCount)
-  const oddsData = [345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459].slice(-maxCount)
-  const data = {
-    labels,
-    datasets: [
-      {
-        // label: 'Dataset 1',
-        data: oddsData,
-        pointBackgroundColor: pointColors,
-        pointRadius: 7,
-        hoverRadius: 10,
-      },
-    ],
-  };
+  const labels = Array.from(Array(maxSecond).keys()).map(v => v + 1).slice(0, maxSecond);
+  // const pointColors = ['#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3'].slice(-maxSecond)
+  // const oddsData = [345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459].slice(-maxSecond)
+  // const data = {
+  //   labels,
+  //   datasets: [
+  //     {
+  //       // label: 'Dataset 1',
+  //       data: oddsData,
+  //       pointBackgroundColor: pointColors,
+  //       pointRadius: 7,
+  //       hoverRadius: 10,
+  //     },
+  //   ],
+  // };
 
   // To avoid issue - Next.js warning for SSR
   const [hasMounted, setHasMounted] = useState(false);
@@ -275,6 +276,21 @@ const CustomTable = ({
       center: 'true',
       compact: 'true',
       cell: (row) => {
+        const logItem = (logData ?? []).find(log => log.siteId === row.siteId)
+        const data = {
+          labels,
+          datasets: [
+            {
+              // label: 'Dataset 1',
+              // data: oddsData,
+              // pointBackgroundColor: pointColors,
+              data: logItem?.odds ?? [],
+              pointBackgroundColor: logItem?.colors ?? [],
+              pointRadius: 7,
+              hoverRadius: 10,
+            },
+          ],
+        };
         return <div
           style={{
             width: '100%',

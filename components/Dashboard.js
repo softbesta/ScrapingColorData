@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from "react";
-import CustomTable from "./DataTable";
+import CustomTable from "./CustomTable";
 import ReactModal from "react-modal";
 import { ImageModal } from "./ImageModal";
 
@@ -12,7 +12,25 @@ const Dashboard = ({
   setIsConnected,
 }) => {
 
-  const [maxTime, setMaxTime] = useState(30)
+  const [logData, setLogData] = useState([
+    {
+      siteId: 1,
+      colors: ['#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3'],
+      odds: [345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459],
+    },
+    {
+      siteId: 2,
+      colors: ['#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3'],
+      odds: [345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459],
+    },
+    {
+      siteId: 3,
+      colors: ['#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3', '#102321', '#f89102', '#17ef28', '#9e18f0', '#2032f3'],
+      odds: [345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459, 345, 290, 343, 123, 459],
+    },
+  ])
+  const [maxSecond, setMaxSecond] = useState(30)
+  const limitSecond = 100
 
   const [isLoading, setIsLoading] = useState(false)
   const isFetching = useRef(false)
@@ -283,10 +301,12 @@ const Dashboard = ({
       <div className="dashContainer">
         <CustomTable
           rows={values}
+          maxSecond={maxSecond}
           onChange={(_event, siteId) => onTblChange(_event, siteId)}
           onToggleItem={(siteId) => onToogleItem(siteId)}
           onRemoveItem={(siteId) => onRemoveItem(siteId)}
           onPickImageItem={(siteId) => { onPickImageItem(siteId) }}
+          logData={logData}
         />
       </div>
       <div className="dashBtns">
@@ -296,12 +316,12 @@ const Dashboard = ({
             id="ttt"
             className="textRight"
             type="number"
-            value={maxTime}
+            value={maxSecond}
             onChange={(_e) => {
               let update = Math.floor(_e.target.value)
-              if (update > 30) update = 30
+              if (update > limitSecond) update = limitSecond
               else if (update < 1) update = 1
-              setMaxTime(update)
+              setMaxSecond(update)
             }}
           />
         </div>
